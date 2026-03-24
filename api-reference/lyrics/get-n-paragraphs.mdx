@@ -24,7 +24,7 @@ Use `shouldRandomizeLyrics=true` to receive paragraphs drawn randomly from diffe
   Array of lyric paragraph strings. Each element is one paragraph from a song.
 </ResponseField>
 
-<ResponseField name="num_paragraphs" type="integer" required>
+<ResponseField name="numParagraphs" type="integer" required>
   The number of paragraphs returned. Matches the value of `numberOfParagraphs` from the request.
 </ResponseField>
 
@@ -51,10 +51,10 @@ curl --request GET \
 ```json 200
 {
   "lyrics": [
-    "I knew you were trouble when you walked in\nSo shame on me now\nFlew me to places I'd never been\nTill you put me down, oh",
-    "Once upon a time, a few mistakes ago\nI was in your sights, you got me alone\nYou found me, you found me, you found me"
+    "He says he doesn't believe anything much he hears these days\nHe says, \"Why fall in love, just so you can watch it go away?\"\nHe spends most of his nights wishing it was how it used to be\nHe spends most of his flights getting pulled down by gravity",
+    "All this time I didn't know\nYou were breaking down\nI'd fall to pieces on the floor\nIf you weren't around\nToo young to know it gets better\nI'll be summer sun for you forever\nForever winter if you go"
   ],
-  "num_paragraphs": 2
+  "numParagraphs": 2
 }
 ```
 

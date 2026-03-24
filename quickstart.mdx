@@ -100,24 +100,15 @@ The response is an array of songs on that album:
 [
   {
     "song_id": 1,
-    "title": "Welcome To New York",
-    "album_id": 1
-  },
-  {
-    "song_id": 2,
     "title": "Blank Space",
     "album_id": 1
   },
   {
-    "song_id": 3,
+    "song_id": 2,
     "title": "Style",
     "album_id": 1
   },
-  {
-    "song_id": 4,
-    "title": "Out Of The Woods",
-    "album_id": 1
-  }
+  ...
 ]
 ```
 
@@ -127,16 +118,16 @@ The response is an array of songs on that album:
 
 <Step title="Fetch lyrics for a song">
 
-Use a `song_id` to retrieve the complete lyrics for that song. For example, to get the lyrics for *Blank Space* (song ID `2`):
+Use a `song_id` to retrieve the complete lyrics for that song. For example, to get the lyrics for *Blank Space* (song ID `1`):
 
 <CodeGroup>
 
 ```bash curl
-curl https://taylor-swift-api.sarbo.workers.dev/lyrics/2
+curl https://taylor-swift-api.sarbo.workers.dev/lyrics/1
 ```
 
 ```javascript JavaScript
-const songId = 2; // Blank Space
+const songId = 1; // Blank Space
 const response = await fetch(`https://taylor-swift-api.sarbo.workers.dev/lyrics/${songId}`);
 const data = await response.json();
 console.log(data.lyrics);
@@ -145,7 +136,7 @@ console.log(data.lyrics);
 ```python Python
 import requests
 
-song_id = 2  # Blank Space
+song_id = 1  # Blank Space
 response = requests.get(f'https://taylor-swift-api.sarbo.workers.dev/lyrics/{song_id}')
 data = response.json()
 print(data['lyrics'])
@@ -157,7 +148,7 @@ The response contains the song title and full lyrics as a single string:
 
 ```json
 {
-  "song_id": 2,
+  "song_id": 1,
   "song_title": "Blank Space",
   "lyrics": "Nice to meet you, where you been?\nI could show you incredible things\nMagic, madness, heaven, sin\nSaw you there and I thought\nOh my God, look at that face\nYou look like my next mistake\nLove's a game, wanna play?\n..."
 }
@@ -172,12 +163,12 @@ You can fetch a set number of random lyric paragraphs — useful for placeholder
 <CodeGroup>
 
 ```bash curl
-curl "https://taylor-swift-api.sarbo.workers.dev/lyrics?numberOfParagraphs=3&shouldRandomizeLyrics=true"
+curl "https://taylor-swift-api.sarbo.workers.dev/lyrics?numberOfParagraphs=2&shouldRandomizeLyrics=true"
 ```
 
 ```javascript JavaScript
 const params = new URLSearchParams({
-  numberOfParagraphs: 3,
+  numberOfParagraphs: 2,
   shouldRandomizeLyrics: true,
 });
 
@@ -192,7 +183,7 @@ console.log(data.lyrics);
 import requests
 
 params = {
-    'numberOfParagraphs': 3,
+    'numberOfParagraphs': 2,
     'shouldRandomizeLyrics': True,
 }
 
@@ -208,13 +199,15 @@ print(data['lyrics'])
 
 ```json
 {
-  "song_id": 47,
-  "song_title": "All Too Well",
-  "lyrics": "I walked through the door with you\nThe air was cold but something 'bout it felt like home somehow\n\nAnd I left my scarf there at your sister's house\nAnd you've still got it in your drawer even now\n\nOh, your sweet disposition and my wide-eyed gaze\nWe're singing in the car, getting lost upstate"
+  "lyrics": [
+    "He says he doesn't believe anything much he hears these days\nHe says, \"Why fall in love, just so you can watch it go away?\"\nHe spends most of his nights wishing it was how it used to be\nHe spends most of his flights getting pulled down by gravity",
+    "All this time I didn't know\nYou were breaking down\nI'd fall to pieces on the floor\nIf you weren't around\nToo young to know it gets better\nI'll be summer sun for you forever\nForever winter if you go"
+  ],
+  "numParagraphs": 2
 }
 ```
 
-<Tip>Set `shouldRandomizeLyrics=false` to get the first N paragraphs of lyrics from the same song rather than randomly selected paragraphs.</Tip>
+<Tip>Set `shouldRandomizeLyrics=false` (or omit it) to get paragraphs in sequential order starting from the first song.</Tip>
 
 </Step>
 
@@ -233,11 +226,11 @@ print(data['lyrics'])
 
 ## Next steps
 
-<Columns cols={2}>
+<CardGroup cols={2}>
   <Card title="API reference" icon="code" href="/api-reference/overview">
     Full endpoint documentation with all parameters and response schemas.
   </Card>
   <Card title="Browse albums" icon="record-vinyl" href="/guides/albums">
     Learn how to work with the albums endpoint in depth.
   </Card>
-</Columns>
+</CardGroup>
