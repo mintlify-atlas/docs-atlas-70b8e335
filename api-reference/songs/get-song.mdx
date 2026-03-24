@@ -1,0 +1,58 @@
+---
+title: 'Get a song'
+description: 'Returns details for a single song by its song ID.'
+api: 'GET https://taylor-swift-api.sarbo.workers.dev/songs/{songID}'
+---
+
+Returns a single song object for the given song ID.
+
+<Info>
+  Note that the response field for the song title is `song_title`, not `title`. This differs from the array responses returned by the [Get all songs](/api-reference/songs/get-all-songs) and [Get songs in an album](/api-reference/albums/get-songs-in-album) endpoints.
+</Info>
+
+## Path parameters
+
+<ParamField path="songID" type="integer" required>
+  The unique identifier of the song. Use the [Get all songs](/api-reference/songs/get-all-songs) endpoint to look up valid song IDs.
+</ParamField>
+
+## Response
+
+<ResponseField name="song_id" type="integer" required>
+  Unique identifier for the song.
+</ResponseField>
+
+<ResponseField name="song_title" type="string" required>
+  Title of the song.
+</ResponseField>
+
+<ResponseField name="album_id" type="integer" required>
+  ID of the album this song belongs to.
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://taylor-swift-api.sarbo.workers.dev/songs/10
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "song_id": 10,
+  "song_title": "Wonderland",
+  "album_id": 1
+}
+```
+
+```json 404
+{
+  "error": "Song not found"
+}
+```
+
+</ResponseExample>

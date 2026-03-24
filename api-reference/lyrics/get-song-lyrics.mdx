@@ -1,0 +1,54 @@
+---
+title: 'Get lyrics for a song'
+description: 'Returns the full lyrics for a specific song by its song ID.'
+api: 'GET https://taylor-swift-api.sarbo.workers.dev/lyrics/{songID}'
+---
+
+Returns the song ID, title, and complete lyrics for the given song. Lyrics are returned as a single string with line breaks represented as `\n`.
+
+## Path parameters
+
+<ParamField path="songID" type="integer" required>
+  The unique identifier of the song. Use the [Get all songs](/api-reference/songs/get-all-songs) endpoint to look up valid song IDs.
+</ParamField>
+
+## Response
+
+<ResponseField name="song_id" type="integer" required>
+  Unique identifier for the song.
+</ResponseField>
+
+<ResponseField name="song_title" type="string" required>
+  Title of the song.
+</ResponseField>
+
+<ResponseField name="lyrics" type="string" required>
+  Full lyrics of the song as a single string. Individual lines are separated by `\n`.
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://taylor-swift-api.sarbo.workers.dev/lyrics/10
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "song_id": 10,
+  "song_title": "Wonderland",
+  "lyrics": "Flashing lights and we\nTook a wrong turn and we\n..."
+}
+```
+
+```json 404
+{
+  "error": "Lyrics not found"
+}
+```
+
+</ResponseExample>

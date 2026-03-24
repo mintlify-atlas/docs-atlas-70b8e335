@@ -1,0 +1,108 @@
+---
+title: 'Working with songs'
+description: 'Browse the full Taylor Swift song catalog or look up a specific track by its song ID.'
+---
+
+The songs endpoints let you browse every song in the catalog or retrieve a single track by its stable ID. Song IDs are consistent across all endpoints and can be used to fetch lyrics.
+
+<CardGroup cols={2}>
+  <Card title="List all songs" icon="list">
+    Get every track across the entire catalog in one request.
+  </Card>
+  <Card title="Get a single song" icon="music">
+    Fetch details for one track by its `song_id`.
+  </Card>
+</CardGroup>
+
+## List all songs
+
+Send a `GET` request to `/songs` to retrieve every song in the catalog. The response is an array of song objects ordered by song ID.
+
+<CodeGroup>
+
+```bash curl
+curl https://taylor-swift-api.sarbo.workers.dev/songs
+```
+
+```javascript fetch
+const response = await fetch('https://taylor-swift-api.sarbo.workers.dev/songs');
+const songs = await response.json();
+console.log(`Total songs: ${songs.length}`);
+```
+
+</CodeGroup>
+
+**Example response (truncated)**
+
+```json
+[
+  { "song_id": 1,  "title": "Tim McGraw",          "album_id": 1 },
+  { "song_id": 2,  "title": "Picture to Burn",      "album_id": 1 },
+  { "song_id": 3,  "title": "Teardrops on My Guitar", "album_id": 1 },
+  { "song_id": 4,  "title": "A Place in This World", "album_id": 1 },
+  { "song_id": 5,  "title": "Cold as You",          "album_id": 1 },
+  ...
+]
+```
+
+## Get a single song
+
+Send a `GET` request to `/songs/{songID}` to retrieve one song by its ID. The example below fetches song `10`, which is **Wonderland** from the debut album.
+
+<CodeGroup>
+
+```bash curl
+curl https://taylor-swift-api.sarbo.workers.dev/songs/10
+```
+
+```javascript fetch
+const songId = 10; // Wonderland
+const response = await fetch(
+  `https://taylor-swift-api.sarbo.workers.dev/songs/${songId}`
+);
+const song = await response.json();
+console.log(song.song_title); // "Wonderland"
+```
+
+</CodeGroup>
+
+**Example response**
+
+```json
+{
+  "song_id": 10,
+  "song_title": "Wonderland",
+  "album_id": 1
+}
+```
+
+## Song object fields
+
+The song object returned by `/songs/{songID}` has three fields:
+
+| Field        | Type    | Description                                       |
+| ------------ | ------- | ------------------------------------------------- |
+| `song_id`    | integer | Stable unique identifier for the song.            |
+| `song_title` | string  | Song title (single-song response only).           |
+| `album_id`   | integer | ID of the album this song belongs to.             |
+
+<Note>
+  The title field is named differently depending on which endpoint you call. In the **list** response (`GET /songs`), the field is `title`. In the **single-song** response (`GET /songs/{songID}`), the same field is named `song_title`. Account for this difference when writing code that handles both responses.
+</Note>
+
+### Finding a song's album
+
+Every song object includes the `album_id` it belongs to. You can use that value to call `GET /albums/{albumID}` and retrieve the full tracklist, or look up the album name from a cached call to `GET /albums`.
+
+```javascript fetch
+// Fetch a song and then look up its album name
+const songResp = await fetch('https://taylor-swift-api.sarbo.workers.dev/songs/10');
+const song = await songResp.json();
+
+const albumsResp = await fetch('https://taylor-swift-api.sarbo.workers.dev/albums');
+const albums = await albumsResp.json();
+
+const album = albums.find(a => a.album_id === song.album_id);
+console.log(`${song.song_title} is on ${album.title}`);
+// Wonderland is on Taylor Swift
+```

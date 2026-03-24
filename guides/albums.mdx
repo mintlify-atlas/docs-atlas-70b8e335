@@ -1,0 +1,116 @@
+---
+title: 'Working with albums'
+description: 'List all Taylor Swift albums and fetch the songs in each one using the Taylor Swift API.'
+---
+
+The Taylor Swift API gives you access to every studio album along with the tracks each one contains. Album IDs are stable integers, so you can safely store and reference them across requests.
+
+<CardGroup cols={2}>
+  <Card title="List albums" icon="list">
+    Retrieve all albums with their release dates.
+  </Card>
+  <Card title="Get album songs" icon="music">
+    Fetch the tracklist for any album by its ID.
+  </Card>
+</CardGroup>
+
+## List all albums
+
+Send a `GET` request to `/albums` to retrieve every album in the catalog. Each object in the response includes the album ID, title, and release date.
+
+<CodeGroup>
+
+```bash curl
+curl https://taylor-swift-api.sarbo.workers.dev/albums
+```
+
+```javascript fetch
+const response = await fetch('https://taylor-swift-api.sarbo.workers.dev/albums');
+const albums = await response.json();
+console.log(albums);
+```
+
+</CodeGroup>
+
+**Example response**
+
+```json
+[
+  { "album_id": 1,  "title": "Taylor Swift",                       "release_date": "2006-10-24" },
+  { "album_id": 2,  "title": "Fearless",                           "release_date": "2008-11-11" },
+  { "album_id": 3,  "title": "Speak Now",                          "release_date": "2010-10-25" },
+  { "album_id": 4,  "title": "Red",                                "release_date": "2012-10-22" },
+  { "album_id": 5,  "title": "1989",                               "release_date": "2014-10-27" },
+  { "album_id": 6,  "title": "reputation",                         "release_date": "2017-11-10" },
+  { "album_id": 7,  "title": "Lover",                              "release_date": "2019-08-23" },
+  { "album_id": 8,  "title": "folklore",                           "release_date": "2020-07-24" },
+  { "album_id": 9,  "title": "evermore",                           "release_date": "2020-12-11" },
+  { "album_id": 10, "title": "Midnights",                          "release_date": "2022-10-21" }
+]
+```
+
+### Album object fields
+
+| Field          | Type    | Description                                  |
+| -------------- | ------- | -------------------------------------------- |
+| `album_id`     | integer | Stable unique identifier for the album.      |
+| `title`        | string  | Album name.                                  |
+| `release_date` | date    | Original release date in `YYYY-MM-DD` format. |
+
+<Info>
+  Album IDs are stable integers. You can persist an `album_id` in your database or configuration and rely on it remaining consistent across API calls.
+</Info>
+
+## Get songs in an album
+
+Send a `GET` request to `/albums/{albumID}` with an album's ID to retrieve its full tracklist. Each song object includes the song ID, title, and the album it belongs to.
+
+The example below fetches the tracklist for **Midnights** (`album_id: 10`).
+
+<CodeGroup>
+
+```bash curl
+curl https://taylor-swift-api.sarbo.workers.dev/albums/10
+```
+
+```javascript fetch
+const albumId = 10; // Midnights
+const response = await fetch(
+  `https://taylor-swift-api.sarbo.workers.dev/albums/${albumId}`
+);
+const songs = await response.json();
+console.log(songs);
+```
+
+</CodeGroup>
+
+**Example response**
+
+```json
+[
+  { "song_id": 241, "title": "Lavender Haze",       "album_id": 10 },
+  { "song_id": 242, "title": "Maroon",               "album_id": 10 },
+  { "song_id": 243, "title": "Anti-Hero",            "album_id": 10 },
+  { "song_id": 244, "title": "Snow on the Beach",    "album_id": 10 },
+  { "song_id": 245, "title": "Midnight Rain",        "album_id": 10 },
+  { "song_id": 246, "title": "Question...?",         "album_id": 10 },
+  { "song_id": 247, "title": "Vigilante Shit",       "album_id": 10 },
+  { "song_id": 248, "title": "Bejeweled",            "album_id": 10 },
+  { "song_id": 249, "title": "Labyrinth",            "album_id": 10 },
+  { "song_id": 250, "title": "Karma",                "album_id": 10 },
+  { "song_id": 251, "title": "Sweet Nothing",        "album_id": 10 },
+  { "song_id": 252, "title": "Mastermind",           "album_id": 10 }
+]
+```
+
+### Song object fields (album tracklist)
+
+| Field      | Type    | Description                              |
+| ---------- | ------- | ---------------------------------------- |
+| `song_id`  | integer | Stable unique identifier for the song.   |
+| `title`    | string  | Song title.                              |
+| `album_id` | integer | ID of the album the song belongs to.     |
+
+<Tip>
+  Once you have a `song_id` from an album tracklist, you can pass it directly to the `/lyrics/{songID}` endpoint to retrieve the full lyrics for that track. See the [lyrics guide](/guides/lyrics) for details.
+</Tip>

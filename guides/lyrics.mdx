@@ -1,0 +1,137 @@
+---
+title: 'Working with lyrics'
+description: 'Fetch full song lyrics by song ID, or generate placeholder lyric paragraphs for prototyping and testing.'
+---
+
+The lyrics endpoints serve two distinct purposes: fetching the complete lyrics for a specific song, and generating a configurable number of lyric paragraphs for use as realistic placeholder text in designs and tests.
+
+<Tabs>
+  <Tab title="Get full lyrics">
+
+## Fetch full lyrics for a song
+
+Send a `GET` request to `/lyrics/{songID}` to retrieve the complete lyrics for a specific track. You need the song's `song_id`, which you can obtain from the `/songs` or `/albums/{albumID}` endpoints.
+
+The example below fetches lyrics for song `10`, **Wonderland**.
+
+<CodeGroup>
+
+```bash curl
+curl https://taylor-swift-api.sarbo.workers.dev/lyrics/10
+```
+
+```javascript fetch
+const songId = 10; // Wonderland
+const response = await fetch(
+  `https://taylor-swift-api.sarbo.workers.dev/lyrics/${songId}`
+);
+const data = await response.json();
+console.log(data.song_title); // "Wonderland"
+console.log(data.lyrics);     // full lyrics string
+```
+
+</CodeGroup>
+
+**Example response**
+
+```json
+{
+  "song_id": 10,
+  "song_title": "Wonderland",
+  "lyrics": "Flashing lights and we\nTook a wrong turn and we\nFell down a rabbit hole...\n"
+}
+```
+
+### Response fields
+
+| Field        | Type    | Description                                        |
+| ------------ | ------- | -------------------------------------------------- |
+| `song_id`    | integer | ID of the song.                                    |
+| `song_title` | string  | Title of the song.                                 |
+| `lyrics`     | string  | Full lyrics, with lines separated by `\n`.         |
+
+<Tip>
+  To display lyrics cleanly in a web interface, split the `lyrics` string on `\n\n` to get individual paragraphs (verses/choruses), then split each paragraph on `\n` for individual lines.
+</Tip>
+
+  </Tab>
+  <Tab title="Get N paragraphs">
+
+## Fetch N lyric paragraphs
+
+Send a `GET` request to `/lyrics` with query parameters to retrieve a set number of lyric paragraphs. This is useful for generating realistic placeholder text in mockups, design systems, or UI tests — similar to Lorem Ipsum but with actual song lyrics.
+
+If the requested paragraph count exceeds what a single song provides, the API cycles through other songs automatically to fulfill the full count.
+
+### Query parameters
+
+| Parameter               | Type    | Required | Default | Description                                              |
+| ----------------------- | ------- | -------- | ------- | -------------------------------------------------------- |
+| `numberOfParagraphs`    | integer | Yes      | —       | Number of lyric paragraphs to return. Must be `>= 1`.   |
+| `shouldRandomizeLyrics` | boolean | No       | `false` | When `true`, paragraphs are drawn from random songs.     |
+
+<CodeGroup>
+
+```bash curl
+# Fetch 2 paragraphs in order
+curl "https://taylor-swift-api.sarbo.workers.dev/lyrics?numberOfParagraphs=2"
+
+# Fetch 3 paragraphs from random songs
+curl "https://taylor-swift-api.sarbo.workers.dev/lyrics?numberOfParagraphs=3&shouldRandomizeLyrics=true"
+```
+
+```javascript fetch
+// Fetch 2 paragraphs in order
+const response = await fetch(
+  'https://taylor-swift-api.sarbo.workers.dev/lyrics?numberOfParagraphs=2'
+);
+const data = await response.json();
+data.lyrics.forEach((paragraph, i) => {
+  console.log(`Paragraph ${i + 1}:\n${paragraph}`);
+});
+
+// Fetch 3 randomized paragraphs
+const randomResp = await fetch(
+  'https://taylor-swift-api.sarbo.workers.dev/lyrics?numberOfParagraphs=3&shouldRandomizeLyrics=true'
+);
+const randomData = await randomResp.json();
+```
+
+</CodeGroup>
+
+**Example response** (`numberOfParagraphs=2`)
+
+```json
+{
+  "lyrics": [
+    "He said the way my blue eyes shined\nPut those Georgia stars to shame that night\nI said: that's a lie",
+    "Just a boy in a Chevy truck\nThat had a tendency of gettin' stuck\nOn back roads at night"
+  ],
+  "numParagraphs": 2
+}
+```
+
+### Response fields
+
+| Field           | Type     | Description                                          |
+| --------------- | -------- | ---------------------------------------------------- |
+| `lyrics`        | string[] | Array of lyric paragraph strings.                    |
+| `numParagraphs` | integer  | Number of paragraphs returned (matches your request).|
+
+### Use cases
+
+<CardGroup cols={2}>
+  <Card title="Placeholder text in designs" icon="pen-ruler">
+    Populate Figma frames or HTML mockups with authentic-sounding lyrics instead of generic Lorem Ipsum.
+  </Card>
+  <Card title="UI testing with realistic content" icon="flask">
+    Seed test fixtures with varied paragraph counts to verify that long-form text renders correctly across screen sizes and components.
+  </Card>
+</CardGroup>
+
+<Info>
+  When `shouldRandomizeLyrics` is `false` (the default), the API returns paragraphs starting from the beginning of the first song and continues sequentially. Set it to `true` when you want variety across multiple renders of the same component.
+</Info>
+
+  </Tab>
+</Tabs>

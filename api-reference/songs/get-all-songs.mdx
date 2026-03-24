@@ -1,0 +1,55 @@
+---
+title: 'Get all songs'
+description: 'Returns a list of all songs across all Taylor Swift albums.'
+api: 'GET https://taylor-swift-api.sarbo.workers.dev/songs'
+---
+
+Returns an array of all songs. Each song includes an ID, title, and the ID of the album it belongs to.
+
+## Response
+
+<ResponseField name="[]" type="object[]">
+  Array of song objects.
+
+  <Expandable title="properties" defaultOpen>
+    <ResponseField name="song_id" type="integer" required>
+      Unique identifier for the song.
+    </ResponseField>
+
+    <ResponseField name="title" type="string" required>
+      Title of the song.
+    </ResponseField>
+
+    <ResponseField name="album_id" type="integer" required>
+      ID of the album this song belongs to.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://taylor-swift-api.sarbo.workers.dev/songs
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+[
+  {
+    "song_id": 1,
+    "title": "Blank Space",
+    "album_id": 1
+  },
+  {
+    "song_id": 2,
+    "title": "Style",
+    "album_id": 1
+  }
+]
+```
+
+</ResponseExample>

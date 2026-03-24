@@ -1,0 +1,49 @@
+---
+title: 'API overview'
+description: 'Everything you need to know before making your first request to the Taylor Swift API.'
+---
+
+The Taylor Swift API is a free, public REST API that provides access to albums, songs, and lyrics data. No account, API key, or authentication is required.
+
+<Note>
+  The Taylor Swift API is completely free and open. You do not need an API key or any form of authentication to use it.
+</Note>
+
+## Base URL
+
+All endpoints are relative to the following base URL:
+
+```
+https://taylor-swift-api.sarbo.workers.dev
+```
+
+## Authentication
+
+None required. All endpoints are publicly accessible.
+
+## Request format
+
+- All requests use the **GET** HTTP method.
+- No request body is ever required.
+- Parameters are passed either as **path parameters** (e.g., `/songs/10`) or **query string parameters** (e.g., `/lyrics?numberOfParagraphs=2`).
+
+## Response format
+
+All responses are returned as JSON. Every successful response has a `Content-Type` of `application/json`.
+
+## HTTP methods
+
+This API is read-only. The only HTTP method used across all endpoints is `GET`.
+
+## Status codes
+
+| Code | Meaning | When it occurs |
+|------|---------|----------------|
+| `200` | Success | The request succeeded and the response body contains the requested data. |
+| `400` | Bad request | A required query parameter is missing or has an invalid value. |
+| `404` | Not found | The requested resource (album, song, or lyrics) does not exist. |
+| `500` | Internal server error | An unexpected error occurred on the server. |
+
+## Rate limits
+
+Rate limits are not formally documented. The API handles 1,000+ requests per day from public usage. For sustained high-volume use, consider caching responses locally.

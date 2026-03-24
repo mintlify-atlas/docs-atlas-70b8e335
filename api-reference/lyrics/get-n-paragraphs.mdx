@@ -1,0 +1,67 @@
+---
+title: 'Get N paragraphs of lyrics'
+description: 'Returns a requested number of lyric paragraphs, optionally randomized, drawn from across all songs.'
+api: 'GET https://taylor-swift-api.sarbo.workers.dev/lyrics'
+---
+
+Returns a specified number of lyric paragraphs sourced from across all songs. The API cycles through songs to fulfill the requested count — if a single song does not have enough paragraphs, it picks another song to continue filling the response.
+
+Use `shouldRandomizeLyrics=true` to receive paragraphs drawn randomly from different songs, or `false` (the default) to receive paragraphs in order.
+
+## Query parameters
+
+<ParamField query="numberOfParagraphs" type="integer" required placeholder="e.g. 2">
+  The number of lyric paragraphs to return. Must be an integer greater than or equal to `1`.
+</ParamField>
+
+<ParamField query="shouldRandomizeLyrics" type="string" default="false" placeholder="true or false">
+  Whether to randomize which songs and paragraphs are selected. Accepts `"true"` or `"false"`. Defaults to `"false"` when omitted, returning paragraphs in a consistent order.
+</ParamField>
+
+## Response
+
+<ResponseField name="lyrics" type="string[]" required>
+  Array of lyric paragraph strings. Each element is one paragraph from a song.
+</ResponseField>
+
+<ResponseField name="num_paragraphs" type="integer" required>
+  The number of paragraphs returned. Matches the value of `numberOfParagraphs` from the request.
+</ResponseField>
+
+<RequestExample>
+
+<CodeGroup>
+
+```bash With randomization
+curl --request GET \
+  --url "https://taylor-swift-api.sarbo.workers.dev/lyrics?numberOfParagraphs=2&shouldRandomizeLyrics=true"
+```
+
+```bash Without randomization
+curl --request GET \
+  --url "https://taylor-swift-api.sarbo.workers.dev/lyrics?numberOfParagraphs=2&shouldRandomizeLyrics=false"
+```
+
+</CodeGroup>
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "lyrics": [
+    "I knew you were trouble when you walked in\nSo shame on me now\nFlew me to places I'd never been\nTill you put me down, oh",
+    "Once upon a time, a few mistakes ago\nI was in your sights, you got me alone\nYou found me, you found me, you found me"
+  ],
+  "num_paragraphs": 2
+}
+```
+
+```json 400
+{
+  "error": "numberOfParagraphs is required and must be an integer greater than or equal to 1"
+}
+```
+
+</ResponseExample>
