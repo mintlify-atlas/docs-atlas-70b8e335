@@ -1,0 +1,65 @@
+{
+  "projectType": "api-service",
+  "projectName": "Taylor Swift API",
+  "projectDescription": "A REST API for accessing Taylor Swift's discography including albums, songs, and lyrics, hosted on Cloudflare Workers.",
+  "theme": "sequoia",
+  "primaryColor": "#1c1c1c",
+  "lightColor": "#8c8c86",
+  "darkColor": "#e0e0df",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["introduction", "quickstart"]
+          },
+          {
+            "group": "Guides",
+            "pages": ["guides/albums", "guides/songs", "guides/lyrics"]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": ["api-reference/overview"]
+          },
+          {
+            "group": "Albums",
+            "pages": ["api-reference/albums/get-all-albums", "api-reference/albums/get-songs-in-album"]
+          },
+          {
+            "group": "Songs",
+            "pages": ["api-reference/songs/get-all-songs", "api-reference/songs/get-song"]
+          },
+          {
+            "group": "Lyrics",
+            "pages": ["api-reference/lyrics/get-song-lyrics", "api-reference/lyrics/get-n-paragraphs"]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Retrieve all Taylor Swift albums with release dates",
+    "Fetch all songs within a specific album",
+    "Get song information by song ID",
+    "Retrieve full lyrics for any song",
+    "Generate N paragraphs of lyrics for Lorem Ipsum-style placeholder content",
+    "Randomize lyrics retrieval for variety",
+    "High-traffic API serving 1000+ requests daily (peak 170k/day)",
+    "Hosted on Cloudflare Workers with D1 database"
+  ],
+  "publicApiSurface": [
+    "GET /albums — Returns all Taylor Swift albums",
+    "GET /albums/{albumID} — Returns all songs within a specific album",
+    "GET /songs — Returns all songs across all albums",
+    "GET /songs/{songID} — Returns song information for a specific song",
+    "GET /lyrics/{songID} — Returns lyrics for a specific song",
+    "GET /lyrics?numberOfParagraphs={n}&shouldRandomizeLyrics={bool} — Returns N paragraphs of lyrics"
+  ]
+}
